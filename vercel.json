@@ -1,6 +1,6 @@
 {
     "routes": [
         { "src": "/api/.*", "status": 404 },
-        { "src": "^/video/(?<id>[^/]+)$", "dest": "/api/video/$id" }
+        { "src": "^/video/(?<id>[^/]+)$", "dest": "/api/video?id=$id" }
     ]
 }

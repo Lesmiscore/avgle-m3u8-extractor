@@ -3,7 +3,7 @@ const chromium = require("chrome-aws-lambda");
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 module.exports = async (req, res) => {
-  const { id } = req.params;
+  const { id } = req.query;
   const { puppeteer } = chromium;
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--autoplay-policy=no-user-gesture-required"],
