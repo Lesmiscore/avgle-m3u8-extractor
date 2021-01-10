@@ -3,7 +3,7 @@ const chromium = require("chrome-aws-lambda");
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 module.exports = async (req, res) => {
-  const { id } = req.query;
+  const { id, take } = req.query;
   const { puppeteer } = chromium;
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--autoplay-policy=no-user-gesture-required"],
@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
         });
         console.log("video played");
         /* eslint no-constant-condition: 0 */
-        if (true) {
+        if (take == "yes") {
           // send screenshot for debugging
           const img = await page.screenshot({ type: "png" });
           res.setHeader("Content-Type", "image/png");
