@@ -10,14 +10,21 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^5.5.0"
+    "chrome-aws-lambda": "^5.5.0",
+    "puppeteer-core": "^5.5.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "eslint": "^7.17.0",
     "husky": "^4.3.7",
     "lint-staged": "^10.5.3",
     "mocha": "^8.2.1",
     "prettier": "^2.2.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "*.js": [
