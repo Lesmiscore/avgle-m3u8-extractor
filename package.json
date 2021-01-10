@@ -31,6 +31,10 @@
       "prettier --print-width 200 --write",
       "eslint",
       "git add"
+    ],
+    "*.json": [
+      "prettier --print-width 200 --write",
+      "git add"
     ]
   }
 }

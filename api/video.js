@@ -33,9 +33,18 @@ module.exports = async (req, res) => {
           } else if (request.url().includes("jads.co")) {
             // easy adblocking
             request.abort();
+          } else if (request.url().includes("recaptcha/api/siteverify")) {
+            // you don't need to honor recaptcha
+            request.continue({
+              // replace with fake code
+              body: '{"success":true}',
+            });
           } else if (request.url().includes("recaptcha")) {
             // you don't need to honor recaptcha
-            request.abort();
+            request.continue({
+              // replace with fake code
+              url: "https://avgle-m3u8-extractor.vercel.app/recaptcha.js",
+            });
           } else {
             request.continue();
           }
