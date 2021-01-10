@@ -57,6 +57,14 @@ module.exports = async (req, res) => {
           }
         });
         console.log("video played");
+        /* eslint no-constant-condition: 0 */
+        if (true) {
+          // send screenshot for debugging
+          await wait(1000);
+          const img = await page.screenshot({ type: "png" });
+          res.setHeader("Content-Type", "image/png");
+          res.send(img);
+        }
       })().catch(reject);
     });
   } finally {
