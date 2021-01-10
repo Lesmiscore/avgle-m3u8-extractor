@@ -33,6 +33,9 @@ module.exports = async (req, res) => {
           } else if (request.url().includes("jads.co")) {
             // easy adblocking
             request.abort();
+          } else if (request.url().includes("recaptcha")) {
+            // you don't need to honor recaptcha
+            request.abort();
           } else {
             request.continue();
           }
@@ -57,8 +60,7 @@ module.exports = async (req, res) => {
           }
         });
         console.log("video played");
-        /* eslint no-constant-condition: 0 */
-        if (take == "yes") {
+        if (take == "yes" || take == "take") {
           // send screenshot for debugging
           const img = await page.screenshot({ type: "png" });
           res.setHeader("Content-Type", "image/png");
