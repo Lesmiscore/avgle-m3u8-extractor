@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
           if (request.url() == "https://avgle.com/templates/frontend/videojs-contrib-hls.js") {
             request.continue({
               // replace with patched code
-              url: "https://rawcdn.githack.com/nao20010128nao/avgle-m3u8-extractor/2d5ca7ed24db6bd2911ed5f2a1b72c08790c144e/videojs-contrib-hls.js",
+              url: "https://avgle-m3u8-extractor.vercel.app/videojs-contrib-hls.js",
             });
           } else if (request.url().endsWith("?adblock_detected")) {
             // easy adblocking
