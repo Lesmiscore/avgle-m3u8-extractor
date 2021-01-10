@@ -1,4 +1,4 @@
 const id = process.argv[2];
-const r = require("./api/video/[id].js");
+const r = require("./api/video.js");
 
-r({ params: { id } }, { send: console.log });
+r({ query: { id, take: "yes" } }, { send: console.log, end: console.log });

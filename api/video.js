@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
   const { puppeteer } = chromium;
   const browser = await puppeteer.launch({
     args: [...chromium.args, "--autoplay-policy=no-user-gesture-required"],
-    executablePath: await chromium.executablePath,
+    executablePath: (await chromium.executablePath) || process.env.CHROMIUM_PATH,
     env: process.env,
   });
   const page = await browser.newPage();
@@ -20,8 +20,8 @@ module.exports = async (req, res) => {
           .on("response", (response) => console.log(`${response.status()} ${response.url()}`))
           .on("requestfailed", (request) => console.log(`${request.failure().errorText} ${request.url()}`));
         await page.exposeFunction("reportResponseText", (response) => {
-          res.writeHead(200, { "Content-Type": "application/x-mpegurl" });
-          res.end(response);
+          res.setHeader("Content-Type", "application/x-mpegurl");
+          res.send(response);
           resolve();
         });
         await page.setRequestInterception(true);
@@ -36,6 +36,9 @@ module.exports = async (req, res) => {
             // easy adblocking
             request.abort();
           } else if (request.url().includes("jads.co")) {
+            // easy adblocking
+            request.abort();
+          } else if (request.url().includes("ads.")) {
             // easy adblocking
             request.abort();
           } else if (request.url().includes("recaptcha/api/siteverify")) {
@@ -68,7 +71,6 @@ module.exports = async (req, res) => {
         }
         console.log("clicked");
         await page.evaluate((_) => {
-          console.log(window.reportResponseText);
           /* eslint no-undef: 0 */
           closeAd({ screenX: 1, originalEvent: { isTrusted: true } });
         });
