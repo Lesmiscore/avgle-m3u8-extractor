@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
         await page.setRequestInterception(true);
         page.on("request", (request) => {
           if (request.url() == "https://avgle.com/templates/frontend/videojs-contrib-hls.js") {
-            console.log("replacing url");
+            console.log("replacing url 1");
             request.continue({
               // replace with patched code
               url: "https://avgle-m3u8-extractor.vercel.app/videojs-contrib-hls.js",
@@ -35,12 +35,14 @@ module.exports = async (req, res) => {
             request.abort();
           } else if (request.url().includes("recaptcha/api/siteverify")) {
             // you don't need to honor recaptcha
+            console.log("responding with fake response");
             request.continue({
-              // replace with fake code
+              // replace with fake response
               body: '{"success":true}',
             });
           } else if (request.url().includes("recaptcha")) {
             // you don't need to honor recaptcha
+            console.log("replacing url 2");
             request.continue({
               // replace with fake code
               url: "https://avgle-m3u8-extractor.vercel.app/recaptcha.js",
