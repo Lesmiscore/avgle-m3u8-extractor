@@ -14,6 +14,11 @@ module.exports = async (req, res) => {
   try {
     await new Promise((resolve, reject) => {
       (async () => {
+        page
+          .on("console", (message) => console.log(`${message.type().substr(0, 3).toUpperCase()} ${message.text()}`))
+          .on("pageerror", ({ message }) => console.log(message))
+          .on("response", (response) => console.log(`${response.status()} ${response.url()}`))
+          .on("requestfailed", (request) => console.log(`${request.failure().errorText} ${request.url()}`));
         await page.exposeFunction("reportResponseText", (response) => {
           res.writeHead(200, { "Content-Type": "application/x-mpegurl" });
           res.end(response);
@@ -63,6 +68,7 @@ module.exports = async (req, res) => {
         }
         console.log("clicked");
         await page.evaluate((_) => {
+          console.log(window.reportResponseText);
           /* eslint no-undef: 0 */
           closeAd({ screenX: 1, originalEvent: { isTrusted: true } });
         });
