@@ -51,7 +51,9 @@ module.exports = async (req, res) => {
             request.continue();
           }
         });
-        await page.goto(`https://avgle.com/video/${id}/`);
+        await page.goto(`https://avgle.com/video/${id}/`, {
+          timeout: 2000,
+        });
         console.log("loaded");
         const [button] = await page.$x("//span[@id='player_3x2_close']");
         if (button) {
