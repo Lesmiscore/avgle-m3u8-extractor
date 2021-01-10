@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
   });
   const page = await browser.newPage();
   try {
-    await new Promise((resolve) => {
+    await new Promise((resolve, reject) => {
       (async () => {
         await page.exposeFunction("reportResponseText", (response) => {
           res.writeHead(200, { "Content-Type": "application/x-mpegurl" });
@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
         await page.setRequestInterception(true);
         page.on("request", (request) => {
           if (request.url() == "https://avgle.com/templates/frontend/videojs-contrib-hls.js") {
+            console.log("replacing url");
             request.continue({
               // replace with patched code
               url: "https://avgle-m3u8-extractor.vercel.app/videojs-contrib-hls.js",
@@ -37,14 +38,17 @@ module.exports = async (req, res) => {
           }
         });
         await page.goto(`https://avgle.com/video/${id}/`);
+        console.log("loaded");
         const [button] = await page.$x("//span[@id='player_3x2_close']");
         if (button) {
           await button.click();
         }
+        console.log("clicked");
         await page.evaluate((_) => {
           /* eslint no-undef: 0 */
           closeAd({ screenX: 1, originalEvent: { isTrusted: true } });
         });
+        console.log("ad closed");
         await wait(100);
         await page.evaluate((_) => {
           /* eslint no-undef: 0 */
@@ -52,7 +56,8 @@ module.exports = async (req, res) => {
             p.play();
           }
         });
-      })();
+        console.log("video played");
+      })().catch(reject);
     });
   } finally {
     await page.close();
